@@ -64,10 +64,6 @@ describe('Service', function () {
             deepCopy: false,
             cacheService: '$cacheFactory'
           })
-          .defineCache('deepCopyTestCache', {
-            deepCopy: true,
-            cacheService: '$cacheFactory'
-          })
       }])
 
     angular.mock.module('test')
@@ -270,40 +266,6 @@ describe('Service', function () {
           done()
         })
       })
-    })
-
-    it('deepCopy cache config option should deep copy on set', function () {
-      var testValue = [{ hi: true, mom: [{ 1: '😍' }] }]
-
-      var refCopyCache = httpEtag.getCache('referenceCopyTestCache')
-      var deepCopyCache = httpEtag.getCache('deepCopyTestCache')
-
-      refCopyCache.setItem('test', testValue)
-      deepCopyCache.setItem('test', testValue)
-
-      testValue.push(':D')
-
-      refCopyCache.getItem('test').should.equal(testValue)
-      deepCopyCache.getItem('test').should.not.deep.equal(testValue)
-    })
-
-    it('deepCopy cache config option should deep copy on get', function () {
-      var testValue = [{ hi: true, mom: [{ 1: '😍' }] }]
-
-      var refCopyCache = httpEtag.getCache('referenceCopyTestCache')
-      var deepCopyCache = httpEtag.getCache('deepCopyTestCache')
-
-      refCopyCache.setItem('test', testValue)
-      deepCopyCache.setItem('test', testValue)
-
-      var refCopy = refCopyCache.getItem('test')
-      var deepCopy = deepCopyCache.getItem('test')
-
-      refCopy.push(':D')
-      deepCopy.push(':D')
-
-      refCopy.should.equal(refCopyCache.getItem('test'))
-      deepCopy.should.not.deep.equal(deepCopyCache.getItem('test'))
     })
   })
 

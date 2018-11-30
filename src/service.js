@@ -1,5 +1,4 @@
 import angular from 'angular'
-import deepcopy from 'deepcopy'
 
 export default httpEtagProvider
 
@@ -28,11 +27,10 @@ function httpEtagProvider () {
   // Cache config defaults
   var defaultCacheId = 'httpEtagCache'
   var defaultEtagCacheConfig = {
-    deepCopy: false,
     cacheResponseData: true,
     cacheService: '$cacheFactory',
     cacheOptions: {
-      number: 25
+      number: 128
     }
   }
 
@@ -110,10 +108,8 @@ function httpEtagProvider () {
       var cache = caches[cacheId] = adaptedServices[config.cacheService].getCache(cacheId)
       var adaptedCache = adaptedCaches[cacheId] = {}
       // Determine whether to perform deepcopying or not
-      var serviceDeepCopies = cacheAdapters[config.cacheService].config.storesDeepCopies
-      var deepCopy = !serviceDeepCopies && cacheDefinitions[cacheId].deepCopy
       var copy = function (value) {
-        return deepCopy ? deepcopy(value) : value
+        return value
       }
 
       angular.forEach(cacheAdapterMethods, function (method) {
